@@ -1,5 +1,6 @@
 'use strict';
-const HttpError = require('http-error-constructor'),
+const _ = require('lodash'),
+  HttpError = require('http-error-constructor'),
   core = require('../../../core');
 
 exports = module.exports = (req, res, next) => {

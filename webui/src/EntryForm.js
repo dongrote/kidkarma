@@ -8,15 +8,20 @@ class EntryForm extends Component {
     validInput: false,
     loading: false,
     error: false,
+    shortName: '',
     action: '',
     karma: 0,
     newKarma: 0,
   };
 
+  updateShortName(name) {
+    this.setState({shortName: name, validInput: this.state.action.length && name.length});
+  }
+
   updateAction(action) {
     this.setState({
       action,
-      validInput: Boolean(action.length),
+      validInput: action.length && this.state.shortName.length,
     });
   }
 
@@ -24,13 +29,45 @@ class EntryForm extends Component {
     this.setState({
       karma,
       newKarma: this.props.karmaOperation(this.props.karma, karma),
-      validInput: Boolean(this.state.action.length),
+      validInput: this.state.action.length && this.state.shortName.length,
     });
+  }
+
+  async onSubmit() {
+    this.setState({loading: true});
+    var res = await fetch(this.props.url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        ChildId: this.props.childId,
+        karma: this.state.karma,
+        [this.props.shortNameField]: this.state.shortName,
+        description: this.state.action,
+      }),
+    });
+    this.setState({loading: false, error: !res.ok});
+    if (res.ok) {
+      this.props.onSuccess();
+    }
   }
 
   render() {
     return (
       <Grid>
+        <Grid.Row columns={1}>
+          <Grid.Column textAlign='left'>
+            <Form>
+              <Form.Field>
+                <label>Short Name</label>
+                <input
+                  placeholder='Something Short'
+                  value={this.state.shortName}
+                  onInput={e => this.updateShortName(e.target.value)}
+                />
+              </Form.Field>
+            </Form>
+          </Grid.Column>
+        </Grid.Row>
         <Grid.Row columns={1}>
           <Grid.Column textAlign='left'>
             <Form>
@@ -75,6 +112,7 @@ class EntryForm extends Component {
               error={this.state.error.toString()}
               disabled={!this.state.validInput}
               content='Submit'
+              onClick={() => this.onSubmit()}
             />
           </Grid.Column>
           <Grid.Column>
