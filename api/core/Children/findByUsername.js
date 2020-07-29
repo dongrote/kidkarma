@@ -3,12 +3,11 @@ const models = require('../../db/models');
 
 exports = module.exports = username => models.User
   .findOne({
-    where: {username},
+    where: {username, isParent: false},
     attributes: ['username', 'firstName', 'lastName'],
     include: [{
-      model: models.User,
-      as: 'Children',
+      association: 'Parents',
       attributes: ['username', 'firstName', 'lastName'],
     }],
   })
-  .then(parent => parent.toJSON())
+  .then(parent => parent ? parent.toJSON() : null);

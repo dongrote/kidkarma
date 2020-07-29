@@ -15,7 +15,9 @@ module.exports = (sequelize, DataTypes) => {
       MeritInstance.belongsTo(models.User, {as: 'Parent'});
     }
   };
-  MeritInstance.init({}, {
+  MeritInstance.init({
+    karma: DataTypes.INTEGER,
+  }, {
     sequelize,
     modelName: 'MeritInstance',
   });

@@ -1,3 +1,19 @@
 'use strict';
 exports = module.exports = require('express').Router();
-exports.get('/healthz', (req, res) => res.sendStatus(200));
+const healthz = require('./healthz'),
+  login = require('./login'),
+  logout = require('./logout'),
+  verifyJwt = require('../../middleware/verifyJwt'),
+  relationships = require('./relationships'),
+  children = require('./children'),
+  merits = require('./merits'),
+  demerits = require('./demerits');
+
+exports.get('/healthz', healthz);
+exports.post('/login', login);
+exports.get('/logout', logout);
+
+exports.use('/merits', merits);
+exports.use('/demerits', demerits);
+exports.use('/relationships', verifyJwt, relationships);
+exports.use('/children', verifyJwt, children);

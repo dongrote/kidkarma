@@ -15,7 +15,9 @@ module.exports = (sequelize, DataTypes) => {
       DemeritInstance.belongsTo(models.User, {as: 'Parent'});
     }
   };
-  DemeritInstance.init({}, {
+  DemeritInstance.init({
+    karma: DataTypes.INTEGER,
+  }, {
     sequelize,
     modelName: 'DemeritInstance',
   });

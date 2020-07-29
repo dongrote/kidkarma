@@ -1,10 +1,10 @@
 'use strict';
 const _ = require('lodash'),
-  findMeritsForToday = require('./findMeritsForToday'),
-  findDemeritsForToday = require('./findDemeritsForToday');
+  findMerits = require('./findMerits'),
+  findDemerits = require('./findDemerits');
 
-exports = module.exports = (ChildId, utcOffset) => Promise
-  .all([findMeritsForToday, findDemeritsForToday].map(f => f(ChildId, utcOffset)))
+exports = module.exports = ChildId => Promise
+  .all([findMerits, findDemerits].map(f => f(ChildId)))
   .then(([merits, demerits]) => {
     const good = _.sumBy(_.get(merits, 'merits', []), merit => merit.karma),
       bad = _.sumBy(_.get(demerits, 'demerits', []), demerit => demerit.karma);

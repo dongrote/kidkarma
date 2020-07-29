@@ -26,7 +26,7 @@ const server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+server.listen(env.port());
 server.on('error', err => {
   log.error(err);
   process.exit(1);
