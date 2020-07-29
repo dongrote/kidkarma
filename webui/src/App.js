@@ -68,6 +68,7 @@ class App extends Component {
       username: null,
       parent: false,
       child: false,
+      selectedChild: {id: null},
       childStatisticsId: null,
       loadingKarma: false,
       dailyGoodKarma: 0,
