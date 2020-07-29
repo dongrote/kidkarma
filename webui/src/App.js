@@ -124,6 +124,7 @@ class App extends Component {
             <Grid.Row>
               <Grid.Column>
                 <KarmaStatistics
+                  name={this.state.selectedChild.firstName || this.state.selectedChild.username}
                   loading={this.state.loadingKarma}
                   goodKarma={this.state.dailyGoodKarma}
                   badKarma={this.state.dailyBadKarma}
@@ -136,7 +137,7 @@ class App extends Component {
               <Grid columns={1}>
                 <Grid.Row>
                   <Grid.Column>
-                    <Header as='h1' content='Total Karma' />
+                    <Header as='h1' content={`${this.state.selectedChild.firstName || this.state.selectedChild.username}'s Total Karma`} />
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>

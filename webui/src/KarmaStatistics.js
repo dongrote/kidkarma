@@ -4,7 +4,7 @@ import { Grid, Icon, Header, Statistic } from 'semantic-ui-react';
 export default props => (
   <Grid textAlign='center'>
     <Grid.Row columns={1}>
-      <Header as='h1' content='Todays Karma' />
+      <Header as='h1' content={`${props.name}'s Karma Today`} />
     </Grid.Row>
     <Grid.Row columns={3}>
       <Grid.Column>
