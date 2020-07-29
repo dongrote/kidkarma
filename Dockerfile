@@ -1,4 +1,4 @@
-FROM node:12-alpine AS server-builder
+FROM node:12 AS server-builder
 WORKDIR /usr/src/app
 COPY api/package.json .
 RUN npm i
