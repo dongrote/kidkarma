@@ -1,26 +1,59 @@
-import React from 'react';
-import { List, Button } from 'semantic-ui-react';
+import React, { Component } from 'react';
+import { Header, List } from 'semantic-ui-react';
 import EntryForm from './EntryForm';
+import DemeritButton from './DemeritButton';
 
-export default props => (
-  <List divided relaxed>
-    <List.Item>
-      <Button fluid content='Lied' />
-    </List.Item>
-    <List.Item>
-      <Button fluid content='Tantrum' />
-    </List.Item>
-    <List.Item>
-      <Button fluid content='Bad Behavior' />
-    </List.Item>
-    <List.Item>
-    <EntryForm
-      label='Demerit'
-      placeholder='Example: stole money'
-      onCancel={props.onCancel}
-      karma={props.karma}
-      karmaOperation={(x,y) => x - y}
-    />;
-    </List.Item>
-  </List>
-)
+class MeritEntry extends Component {
+  state = {options: []};
+  async componentDidMount() {
+    var res = await fetch('/api/demerits');
+    if (res.ok) {
+      var json = await res.json();
+      this.setState({options: json.demerits});
+    }
+  }
+  render() {
+    return (
+      <List divided relaxed>
+        <List.Item>
+          <Header as='h2' content='Select a Demerit' />
+        </List.Item>
+        {this.state.options.map((o, k) => (
+          <List.Item key={k}>
+            <DemeritButton
+              childId={this.props.childId}
+              name={o.shortDescription}
+              description={o.fullDescription}
+              karma={o.karmaValue}
+              onClick={() => {
+                this.props.onCancel();
+                this.props.onUpdate();
+              }}
+            />
+          </List.Item>
+        ))}
+        <List.Item>
+          <Header as='h2' content='Create a custom Demerit' />
+        </List.Item>
+        <List.Item>
+          <EntryForm
+            url='/api/children/demerit'
+            shortNameField='demerit'
+            childId={this.props.childId}
+            label='Demerit'
+            placeholder='Example: lied'
+            onCancel={this.props.onCancel}
+            onSuccess={() => {
+              this.props.onUpdate();
+              this.props.onCancel();
+            }}
+            karma={this.props.karma}
+            karmaOperation={(x,y) => x - y}
+          />
+        </List.Item>
+      </List>
+    );
+  }
+}
+
+export default MeritEntry;

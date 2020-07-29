@@ -1,5 +1,6 @@
 'use strict';
-const HttpError = require('http-error-constructor'),
+const _ = require('lodash'),
+  HttpError = require('http-error-constructor'),
   core = require('../../../core');
 
 exports = module.exports = (req, res, next) => {
@@ -13,6 +14,8 @@ exports = module.exports = (req, res, next) => {
   if (_.has(req.body, 'description')) {
     options.description = req.body.description;
   }
+  console.dir(req.jwt);
+  console.dir(req.body);
   if (!(ChildId && merit)) {
     return Promise.resolve(next(new HttpError(400)));
   }

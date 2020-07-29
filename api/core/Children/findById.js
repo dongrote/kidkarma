@@ -2,13 +2,13 @@
 const _ = require('lodash'),
   models = require('../../db/models');
 
-exports = module.exports = ParentId => models.User
-  .findByPk(ParentId, {
+exports = module.exports = ChildId => models.User
+  .findByPk(ChildId, {
     attributes: ['id', 'username', 'firstName', 'lastName', 'isParent'],
     include: [{
-      association: 'Children',
+      association: 'Parents',
       attributes: ['id', 'username', 'firstName', 'lastName'],
     }],
   })
-  .then(parent => parent ? parent.toJSON() : null)
-  .then(parent => _.get(parent, 'isParent', false) ? parent : null);
+  .then(child => child ? child.toJSON() : null)
+  .then(child => _.get(child, 'isParent', false) ? null : child);

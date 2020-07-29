@@ -11,6 +11,6 @@ exports = module.exports = (ParentId, ChildId, demeritShortName, options) => Dem
   .then(demerit => models.DemeritInstance.create({
     ParentId,
     ChildId,
-    MeritId: demerit.id,
+    DemeritId: demerit.id,
     karma: _.get(options, 'karma', demerit.karmaValue),
   }));
