@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       MeritInstance.belongsTo(models.Merit);
-      MeritInstance.belongsTo(models.Child);
-      MeritInstance.belongsTo(models.Parent);
+      MeritInstance.belongsTo(models.User, {as: 'Child'});
+      MeritInstance.belongsTo(models.User, {as: 'Parent'});
     }
   };
   MeritInstance.init({}, {

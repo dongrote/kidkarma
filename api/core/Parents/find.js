@@ -1,12 +1,13 @@
 'use strict';
 const models = require('../../db/models');
 
-exports = module.exports = username => models.Parent
+exports = module.exports = username => models.User
   .findOne({
     where: {username},
     attributes: ['username', 'firstName', 'lastName'],
     include: [{
-      model: models.Child,
+      model: models.User,
+      as: 'Children',
       attributes: ['username', 'firstName', 'lastName'],
     }],
   })

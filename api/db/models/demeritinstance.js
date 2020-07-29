@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       DemeritInstance.belongsTo(models.Demerit);
-      DemeritInstance.belongsTo(models.Child);
-      DemeritInstance.belongsTo(models.Parent);
+      DemeritInstance.belongsTo(models.User, {as: 'Child'});
+      DemeritInstance.belongsTo(models.User, {as: 'Parent'});
     }
   };
   DemeritInstance.init({}, {

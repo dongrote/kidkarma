@@ -7,7 +7,7 @@ const _ = require('lodash'),
 exports = module.exports = (ParentId, username, password) => {
   const passwordSalt = `${Date.now()}`,
     passwordHash = Auth.passwordHash(passwordSalt, password);
-  return models.Child.create({username, passwordSalt, passwordHash})
+  return models.User.create({username, passwordSalt, passwordHash, isParenet: false})
     .then(child => Parents.addChild(ParentId, child.id)
       .then(() => _.omit(child.toJSON(), ['passwordSalt', 'passwordHash'])));
 };
