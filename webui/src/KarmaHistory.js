@@ -11,7 +11,7 @@ class KarmaHistory extends Component {
     var res = await fetch(`/api/children/history?ChildId=${encodeURIComponent(this.props.childId)}&limit=${encodeURIComponent(limit)}`);
     if (res.ok) {
       var json = await res.json();
-      this.setState({records: json});
+      this.setState({records: json.items});
     }
   }
  
@@ -24,16 +24,14 @@ class KarmaHistory extends Component {
       <Container fluid>
         <Header as='h2' content='Karma History' />
         <List divided relaxed>
-          {this.state.records.map((r, k) => {
-            const merit = r.Demerit === undefined;
-            return <KarmaHistoryRow
-              merit={merit}
-              karma={r.karma}
+          {this.state.records.map((r, k) => <KarmaHistoryRow
+              good={r.karma > 0}
+              karma={Math.abs(r.karma)}
               key={k}
               date={r.createdAt}
-              action={r[merit ? 'Merit' : 'Demerit'].shortDescription}
-            />;
-          })}
+              action={r.KarmaAction.name}
+              remarks={r.remarks}
+            />)}
         </List>
       </Container>
     );

@@ -35,7 +35,7 @@ class SignInView extends Component {
                       <input
                         placeholder='Username'
                         value={this.state.username}
-                        onInput={e => this.updateUsername(e.target.value)}
+                        onChange={e => this.updateUsername(e.target.value)}
                       />
                     </Form.Field>
                   </Form>
@@ -48,7 +48,7 @@ class SignInView extends Component {
                         type='password'
                         placeholder='Password'
                         value={this.state.password}
-                        onInput={e => this.updatePassword(e.target.value)}
+                        onChange={e => this.updatePassword(e.target.value)}
                       />
                     </Form.Field>
                   </Form>
@@ -65,7 +65,7 @@ class SignInView extends Component {
               content='Sign In'
               type='submit'
               loading={this.state.loading}
-              error={this.state.error}
+              error={this.state.error.toString()}
               onClick={() => this.submit()}
             />
           </Grid.Column>

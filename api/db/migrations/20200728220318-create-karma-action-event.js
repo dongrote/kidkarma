@@ -1,18 +1,18 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('MeritInstances', {
+    await queryInterface.createTable('KarmaActionEvents', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      MeritId: {
+      KarmaActionId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Merits',
+          model: 'KarmaActions',
           key: 'id',
         },
       },
@@ -35,6 +35,9 @@ module.exports = {
       karma: {
         type: Sequelize.INTEGER
       },
+      remarks: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -46,6 +49,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('MeritInstances');
+    await queryInterface.dropTable('KarmaActionEvents');
   }
 };

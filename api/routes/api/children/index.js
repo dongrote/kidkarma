@@ -2,14 +2,12 @@
 exports = module.exports = require('express').Router();
 
 const requireParent = require('../../../middleware/requireParent'),
-  createMerit = require('./createMerit'),
-  createDemerit = require('./createDemerit'),
+  createGoodKarma = require('./createGoodKarma'),
+  createBadKarma = require('./createBadKarma'),
   findKarma = require('./findKarma'),
   history = require('./history');
 
-exports.post('/merit', requireParent, createMerit);
-exports.post('/demerit', requireParent, createDemerit);
+exports.post('/karma/good', requireParent, createGoodKarma);
+exports.post('/karma/bad', requireParent, createBadKarma);
 exports.get('/karma', findKarma);
 exports.get('/history', history);
-// exports.get('/merits', findAllMerits);
-// exports.get('/demerits', findAllDemerits);

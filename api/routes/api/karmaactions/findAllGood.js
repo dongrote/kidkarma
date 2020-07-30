@@ -13,7 +13,7 @@ exports = module.exports = (req, res, next) => {
   if (isNaN(offset)) {
     return Promise.resolve(next(new HttpError(400)));
   }
-  return core.Demerits.findMostRecentlyUsed(options)
+  return core.KarmaActions.findAllGoodKarmaActions(options)
     .then(results => res.json(results))
     .catch(next);
 };

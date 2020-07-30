@@ -169,7 +169,7 @@ class App extends Component {
               </Grid>
             </Grid.Column>
           </Grid.Row>}
-          {false && this.state.selectedChild.id !== null && <Grid.Row>
+          {true && this.state.selectedChild.id !== null && <Grid.Row>
             <Grid.Column textAlign='left'>
               <KarmaHistory childId={this.state.selectedChild.id} />
             </Grid.Column>

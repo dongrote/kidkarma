@@ -4,9 +4,15 @@ const _ = require('lodash'),
   models = require('../../db/models'),
   {Op} = models.Sequelize;
 
+const userAttributes = [
+  'username',
+  'firstName',
+  'lastName',
+];
+  
 exports = module.exports = (ChildId, utcOffset, options) => {
   const startDate = Time.startOfToday(utcOffset);
-  return models.MeritInstance
+  return models.KarmaActionEvent
     .findAndCountAll({
       offset: _.get(options, 'offset', 0),
       limit: _.get(options, 'limit'),
@@ -14,7 +20,11 @@ exports = module.exports = (ChildId, utcOffset, options) => {
         ChildId,
         createdAt: {[Op.gte]: startDate},
       },
-      include: [models.Merit],
+      include: [
+        models.KarmaAction,
+        {model: models.User, as: 'Child', attributes: userAttributes},
+        {model: models.User, as: 'Parent', attributes: userAttributes},
+      ],
     })
-    .then(({count, rows}) => ({count, merits: rows.map(r => r.toJSON())}));
+    .then(({count, rows}) => ({count, items: rows.map(r => r.toJSON())}));
 };

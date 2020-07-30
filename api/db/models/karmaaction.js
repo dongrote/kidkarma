@@ -3,23 +3,30 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Merit extends Model {
+  class KarmaAction extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Merit.hasMany(models.MeritInstance);
+      // define association here
     }
   };
-  Merit.init({
-    shortDescription: DataTypes.STRING,
-    fullDescription: DataTypes.STRING,
-    karmaValue: DataTypes.INTEGER
+  KarmaAction.init({
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    description: DataTypes.STRING,
+    defaultKarmaValue: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
   }, {
     sequelize,
-    modelName: 'Merit',
+    modelName: 'KarmaAction',
   });
-  return Merit;
+  return KarmaAction;
 };

@@ -11,7 +11,7 @@ class AddKarmaButton extends Component {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         ChildId: this.props.childId,
-        [this.props.good ? 'merit' : 'demerit']: this.props.name,
+        action: this.props.name,
         karma: this.props.karma,
       }),
     });
@@ -39,7 +39,7 @@ class AddKarmaButton extends Component {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         ChildId: this.props.childId,
-        [this.props.good ? 'merit' : 'demerit']: this.props.name,
+        action: this.props.name,
         karma: this.state.karma || this.props.karma,
         remarks: this.state.remarks,
       }),
