@@ -25,10 +25,7 @@ class MeritEntry extends Component {
               name={o.shortDescription}
               description={o.fullDescription}
               karma={o.karmaValue}
-              onClick={() => {
-                this.props.onCancel();
-                this.props.onUpdate();
-              }}
+              onClick={() => this.props.onCancel()}
             />
           </List.Item>
         ))}
@@ -43,10 +40,7 @@ class MeritEntry extends Component {
             label='Demerit'
             placeholder='Example: lied'
             onCancel={this.props.onCancel}
-            onSuccess={() => {
-              this.props.onUpdate();
-              this.props.onCancel();
-            }}
+            onSuccess={() => this.props.onCancel()}
             karma={this.props.karma}
             karmaOperation={(x,y) => x - y}
           />

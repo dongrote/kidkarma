@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Container, Grid } from 'semantic-ui-react';
+import io from 'socket.io-client';
+import moment from 'moment';
 import AppHeader from './AppHeader';
 import SignInView from './SignInView';
 import UserBar from './UserBar';
@@ -7,6 +9,9 @@ import MeritEntryView from './MeritEntryView';
 import KarmaStatistics from './KarmaStatistics';
 import TotalKarma from './TotalKarma';
 import ChildSelector from './ChildSelector';
+
+const socket = io();
+socket.on('utcOffset', (unused, cb) => cb(moment().utcOffset()));
 
 class App extends Component {
   state = {
@@ -81,6 +86,19 @@ class App extends Component {
   }
 
   async componentDidMount() {
+    socket.on('karma', ({ChildId, karma}) => {
+      if (ChildId === this.state.selectedChild.id) {
+        this.setState({
+          loadingKarma: false,
+          dailyGoodKarma: karma.daily.good,
+          dailyBadKarma: karma.daily.bad,
+          dailyNetKarma: karma.daily.net,
+          totalGoodKarma: karma.total.good,
+          totalBadKarma: karma.total.bad,
+          totalNetKarma: karma.total.net,
+        });
+      }
+    });
     var res = await fetch('/api/loggedIn');
     if (res.ok) {
       var json = await res.json();
@@ -116,7 +134,6 @@ class App extends Component {
                 karma={this.state.karma}
                 meritEntryMode={this.state.meritEntryMode}
                 onUpdateEntryMode={newMode => this.setState({meritEntryMode: newMode})}
-                onUpdate={() => this.onChildSelect({id: this.state.selectedChild.id})}
               />
             </Grid.Column>
           </Grid.Row>}
