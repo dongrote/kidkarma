@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import { Button, Icon, Grid, Form, TextArea } from 'semantic-ui-react';
 import NumberInput from './NumberInput';
 
-class MeritButton extends Component {
+class AddKarmaButton extends Component {
   state = {loading: false, error: false, showForm: false, remarks: '', karma: null};
   async onClick() {
     this.setState({loadig: true});
-    var res = await fetch('/api/children/merit', {
+    var res = await fetch(this.props.url, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         ChildId: this.props.childId,
-        merit: this.props.name,
+        [this.props.good ? 'merit' : 'demerit']: this.props.name,
         karma: this.props.karma,
       }),
     });
@@ -34,12 +34,12 @@ class MeritButton extends Component {
   }
   async onSubmit() {
     this.setState({loading: true});
-    var res = await fetch('/api/children/merit', {
+    var res = await fetch(this.props.url, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         ChildId: this.props.childId,
-        merit: this.props.name,
+        [this.props.good ? 'merit' : 'demerit']: this.props.name,
         karma: this.state.karma || this.props.karma,
         remarks: this.state.remarks,
       }),
@@ -101,4 +101,4 @@ class MeritButton extends Component {
   }
 }
 
-export default MeritButton;
+export default AddKarmaButton;

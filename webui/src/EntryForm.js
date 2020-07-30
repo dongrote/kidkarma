@@ -11,25 +11,18 @@ class EntryForm extends Component {
     shortName: '',
     action: '',
     karma: 0,
-    newKarma: 0,
   };
 
   updateShortName(name) {
-    this.setState({shortName: name, validInput: this.state.action.length && name.length});
+    this.setState({shortName: name, validInput: Boolean(name.length)});
   }
 
   updateAction(action) {
-    this.setState({
-      action,
-      validInput: action.length && this.state.shortName.length,
-    });
+    this.setState({action, validInput: Boolean(this.state.shortName.length)});
   }
 
   updateKarma(karma) {
-    this.setState({
-      karma,
-      newKarma: this.props.karmaOperation(this.props.karma, karma),
-      validInput: this.state.action.length && this.state.shortName.length,
+    this.setState({karma, validInput: Boolean(this.state.shortName.length),
     });
   }
 
@@ -82,7 +75,7 @@ class EntryForm extends Component {
             </Form>
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row columns={2}>
+        <Grid.Row columns={1}>
           <Grid.Column textAlign='left'>
             <Form>
               <Form.Field>
@@ -91,14 +84,6 @@ class EntryForm extends Component {
                   placeholder='10'
                   onInput={karma => this.updateKarma(karma)}
                 />
-              </Form.Field>
-            </Form>
-          </Grid.Column>
-          <Grid.Column textAlign='left'>
-            <Form>
-              <Form.Field>
-                <label>Resulting Karma</label>
-                <input readOnly value={this.state.newKarma} />
               </Form.Field>
             </Form>
           </Grid.Column>

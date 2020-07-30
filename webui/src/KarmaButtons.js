@@ -9,8 +9,8 @@ export default props => (
           fluid
           positive
           icon='plus'
-          content='Merit'
-          onClick={() => props.onChange('merit')}
+          content='Good Karma'
+          onClick={() => props.onChange('good')}
         />
       </Grid.Column>
       <Grid.Column>
@@ -18,8 +18,8 @@ export default props => (
           fluid
           negative
           icon='minus'
-          content='Demerit'
-          onClick={() => props.onChange('demerit')}
+          content='Bad Karma'
+          onClick={() => props.onChange('bad')}
         />
       </Grid.Column>
     </Grid.Row>

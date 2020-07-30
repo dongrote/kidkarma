@@ -11,7 +11,7 @@ export default props => (
         options={props.kids.map((k, i) => ({
           key: i,
           value: k,
-          text: k.username,
+          text: k.firstName || k.username,
         }))}
         onChange={(e, d) => props.onSelect(d.value)}
         value={props.selectedChild}

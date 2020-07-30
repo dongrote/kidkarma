@@ -5,17 +5,18 @@ import moment from 'moment';
 import AppHeader from './AppHeader';
 import SignInView from './SignInView';
 import UserBar from './UserBar';
-import MeritEntryView from './MeritEntryView';
+import KarmaEntryView from './KarmaEntryView';
 import KarmaStatistics from './KarmaStatistics';
 import TotalKarma from './TotalKarma';
 import ChildSelector from './ChildSelector';
+import KarmaHistory from './KarmaHistory';
 
 const socket = io();
 socket.on('utcOffset', (unused, cb) => cb(moment().utcOffset()));
 
 class App extends Component {
   state = {
-    meritEntryMode: null,
+    karmaEntryMode: null,
     karma: 0,
     loggedIn: false,
     parent: false,
@@ -129,11 +130,11 @@ class App extends Component {
           </Grid.Row>}
           {this.state.parent && <Grid.Row>
             <Grid.Column>
-              <MeritEntryView
+              <KarmaEntryView
                 childId={this.state.selectedChild.id}
                 karma={this.state.karma}
-                meritEntryMode={this.state.meritEntryMode}
-                onUpdateEntryMode={newMode => this.setState({meritEntryMode: newMode})}
+                karmaEntryMode={this.state.karmaEntryMode}
+                onUpdateEntryMode={newMode => this.setState({karmaEntryMode: newMode})}
               />
             </Grid.Column>
           </Grid.Row>}
@@ -166,6 +167,11 @@ class App extends Component {
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
+            </Grid.Column>
+          </Grid.Row>}
+          {false && this.state.selectedChild.id !== null && <Grid.Row>
+            <Grid.Column textAlign='left'>
+              <KarmaHistory childId={this.state.selectedChild.id} />
             </Grid.Column>
           </Grid.Row>}
         </Grid>
