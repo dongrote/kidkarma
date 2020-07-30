@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, Grid } from 'semantic-ui-react';
+import { Button, Form, Grid, TextArea } from 'semantic-ui-react';
 import NumberInput from './NumberInput';
 
 class EntryForm extends Component {
@@ -8,28 +8,21 @@ class EntryForm extends Component {
     validInput: false,
     loading: false,
     error: false,
-    shortName: '',
     action: '',
+    remarks: '',
     karma: 0,
-    newKarma: 0,
   };
 
-  updateShortName(name) {
-    this.setState({shortName: name, validInput: this.state.action.length && name.length});
+  updateRemarks(remarks) {
+    this.setState({remarks, validInput: Boolean(this.state.action.length)});
   }
 
   updateAction(action) {
-    this.setState({
-      action,
-      validInput: action.length && this.state.shortName.length,
-    });
+    this.setState({action, validInput: Boolean(action.length)});
   }
 
   updateKarma(karma) {
-    this.setState({
-      karma,
-      newKarma: this.props.karmaOperation(this.props.karma, karma),
-      validInput: this.state.action.length && this.state.shortName.length,
+    this.setState({karma, validInput: Boolean(this.state.action.length),
     });
   }
 
@@ -41,8 +34,8 @@ class EntryForm extends Component {
       body: JSON.stringify({
         ChildId: this.props.childId,
         karma: this.state.karma,
-        [this.props.shortNameField]: this.state.shortName,
-        description: this.state.action,
+        action: this.state.action,
+        remarks: this.state.remarks,
       }),
     });
     this.setState({loading: false, error: !res.ok});
@@ -61,8 +54,8 @@ class EntryForm extends Component {
                 <label>Short Name</label>
                 <input
                   placeholder='Something Short'
-                  value={this.state.shortName}
-                  onInput={e => this.updateShortName(e.target.value)}
+                  value={this.state.action}
+                  onInput={e => this.updateAction(e.target.value)}
                 />
               </Form.Field>
             </Form>
@@ -72,17 +65,17 @@ class EntryForm extends Component {
           <Grid.Column textAlign='left'>
             <Form>
               <Form.Field>
-                <label>{this.props.label}: What happened?</label>
-                <input
+                <label>Remarks</label>
+                <TextArea
                   placeholder={this.props.placeholder}
-                  value={this.state.action}
-                  onInput={e => this.updateAction(e.target.value)}
+                  value={this.state.remarks}
+                  onInput={e => this.updateRemarks(e.target.value)}
                 />
               </Form.Field>
             </Form>
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row columns={2}>
+        <Grid.Row columns={1}>
           <Grid.Column textAlign='left'>
             <Form>
               <Form.Field>
@@ -91,14 +84,6 @@ class EntryForm extends Component {
                   placeholder='10'
                   onInput={karma => this.updateKarma(karma)}
                 />
-              </Form.Field>
-            </Form>
-          </Grid.Column>
-          <Grid.Column textAlign='left'>
-            <Form>
-              <Form.Field>
-                <label>Resulting Karma</label>
-                <input readOnly value={this.state.newKarma} />
               </Form.Field>
             </Form>
           </Grid.Column>
