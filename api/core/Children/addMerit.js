@@ -1,6 +1,7 @@
 'use strict';
 const _ = require('lodash'),
   models = require('../../db/models'),
+  publishKarmaState = require('./publishKarmaState'),
   Merits = require('../Merits');
 
 exports = module.exports = (ParentId, ChildId, meritShortName, options) => Merits
@@ -14,4 +15,5 @@ exports = module.exports = (ParentId, ChildId, meritShortName, options) => Merit
     MeritId: merit.id,
     karma: _.get(options, 'karma', merit.karmaValue),
   }))
-  .then(row => row.toJSON());
+  .then(row => publishKarmaState(ChildId)
+    .then(() => row.toJSON()));

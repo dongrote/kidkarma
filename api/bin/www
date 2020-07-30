@@ -8,6 +8,7 @@ require('dotenv').config();
 const app = require('../app'),
   env = require('../env'),
   log = require('debug-logger')('api:www'),
+  core = require('../core'),
   http = require('http');
 
 /**
@@ -20,7 +21,15 @@ app.set('port', env.port());
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+const server = http.createServer(app),
+  io = require('socket.io')(server);
+core.Websockets.server(io);
+io.on('connect', client => {
+  core.Websockets.clientConnect(client);
+  client
+    .on('disconnect', reason => core.Websockets.clientDisconnect(client, reason))
+    .on('error', err => core.Websockets.clientError(client, err));
+});
 
 /**
  * Listen on provided port, on all network interfaces.
