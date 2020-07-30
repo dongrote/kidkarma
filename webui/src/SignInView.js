@@ -4,7 +4,7 @@ import { Button, Grid, Form } from 'semantic-ui-react';
 class SignInView extends Component {
   state = {username: '', password: '', loading: false, success: false, error: false};
   updateUsername(username) {
-    this.setState({username});
+    this.setState({username: username.toLowerCase()});
   }
   updatePassword(password) {
     this.setState({password});
