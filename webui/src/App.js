@@ -30,9 +30,12 @@ class App extends Component {
     totalGoodKarma: 0,
     totalBadKarma: 0,
     totalNetKarma: 0,
+    karmaHistory: [],
+    availableKarmaHistory: 0,
   };
 
   kids = [];
+  karmaHistoryLimit = 4;
 
   async onSuccessfulSignIn() {
     var res = await fetch('/api/user');
@@ -51,6 +54,16 @@ class App extends Component {
     }
   }
 
+  async loadKarmaHistory(childId, options) {
+    const offset = options.offset || 0,
+      limit = options.limit;
+    var res = await fetch(`/api/children/history?ChildId=${encodeURIComponent(childId)}&offset=${encodeURIComponent(offset)}&limit=${encodeURIComponent(limit)}`);
+    if (res.ok) {
+      var json = await res.json();
+      this.setState({karmaHistory: json.items, availableKarmaHistory: json.count});
+    }
+  }
+
   async onChildSelect(child) {
     this.setState({loadingKarma: true, selectedChild: child});
     var res = await fetch(`/api/children/karma?ChildId=${encodeURIComponent(child.id)}&utcOffset=${encodeURIComponent(-240)}`);
@@ -65,6 +78,7 @@ class App extends Component {
         totalBadKarma: json.total.bad,
         totalNetKarma: json.total.net,
       });
+      await this.loadKarmaHistory(child.id, {limit: this.karmaHistoryLimit});
     }
   }
 
@@ -86,9 +100,16 @@ class App extends Component {
     });
   }
 
+  async loadMoreKarmaHistory(childId) {
+    this.karmaHistoryLimit += 4;
+    await this.loadKarmaHistory(childId, {limit: this.karmaHistoryLimit});
+  }
+
   async componentDidMount() {
-    socket.on('karma', ({ChildId, karma}) => {
+    socket.on('karma', async ({ChildId, karma}) => {
       if (ChildId === this.state.selectedChild.id) {
+        await this.onChildSelect(ChildId);
+        /*
         this.setState({
           loadingKarma: false,
           dailyGoodKarma: karma.daily.good,
@@ -98,6 +119,7 @@ class App extends Component {
           totalBadKarma: karma.total.bad,
           totalNetKarma: karma.total.net,
         });
+        */
       }
     });
     var res = await fetch('/api/loggedIn');
@@ -171,7 +193,11 @@ class App extends Component {
           </Grid.Row>}
           {true && this.state.selectedChild.id !== null && <Grid.Row>
             <Grid.Column textAlign='left'>
-              <KarmaHistory childId={this.state.selectedChild.id} />
+              <KarmaHistory
+                karmaHistory={this.state.karmaHistory}
+                totalAvailable={this.state.availableKarmaHistory}
+                onLoadMoreClick={() => this.loadMoreKarmaHistory(this.state.selectedChild.id)}
+              />
             </Grid.Column>
           </Grid.Row>}
         </Grid>

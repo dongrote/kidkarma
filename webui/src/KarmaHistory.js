@@ -1,30 +1,25 @@
 import React, { Component } from 'react';
-import { Container, Header, List } from 'semantic-ui-react';
+import { Button, Card, Feed } from 'semantic-ui-react';
 import KarmaHistoryRow from './KarmaHistoryRow';
 
 class KarmaHistory extends Component {
-  state = {records: [], loading: false};
+  state = {loading: false};
 
-  async loadHistory(options) {
-    const offset = options.offset || 0,
-      limit = options.limit;
-    var res = await fetch(`/api/children/history?ChildId=${encodeURIComponent(this.props.childId)}&limit=${encodeURIComponent(limit)}`);
-    if (res.ok) {
-      var json = await res.json();
-      this.setState({records: json.items});
-    }
-  }
- 
-  async componentDidMount() {
-    await this.loadHistory({limit: 4});
+  async onClick() {
+    this.setState({loading: true});
+    await this.props.onLoadMoreClick();
+    this.setState({loading: false});
   }
 
   render() {
     return (
-      <Container fluid>
-        <Header as='h2' content='Karma History' />
-        <List divided relaxed>
-          {this.state.records.map((r, k) => <KarmaHistoryRow
+      <Card fluid>
+        <Card.Content>
+          <Card.Header>Karma History</Card.Header>
+        </Card.Content>
+        <Card.Content>
+          <Feed>
+            {this.props.karmaHistory.map((r, k) => <KarmaHistoryRow
               good={r.karma > 0}
               karma={Math.abs(r.karma)}
               key={k}
@@ -32,11 +27,15 @@ class KarmaHistory extends Component {
               action={r.KarmaAction.name}
               remarks={r.remarks}
             />)}
-        </List>
-      </Container>
+          </Feed>
+        </Card.Content>
+        {this.props.totalAvailable > this.props.karmaHistory.length && (
+          <Card.Content extra>
+            <Button fluid basic loading={this.state.loading} content='Load More' onClick={() => this.onClick()} />
+          </Card.Content>
+        )}
+      </Card>
     );
   }
-
 }
-
 export default KarmaHistory;
