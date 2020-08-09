@@ -9,12 +9,15 @@ exports = module.exports = (ParentId, ChildId, action, options) => KarmaActions
     description: _.get(options, 'description'),
     karma: -Math.abs(_.get(options, 'karma', 0)),
   })
-  .then(karmaAction => models.KarmaActionEvent.create({
-    ParentId,
-    ChildId,
-    KarmaActionId: karmaAction.id,
-    karma: -Math.abs(_.get(options, 'karma', karmaAction.defaultKarmaValue)),
-    remarks: _.get(options, 'remarks'),
-  }))
-  .then(row => publishKarmaState(ChildId)
-    .then(() => row.toJSON()));
+  .then(karmaAction => models.KarmaActionEvent
+    .create({
+      ParentId,
+      ChildId,
+      KarmaActionId: karmaAction.id,
+      karma: -Math.abs(_.get(options, 'karma', karmaAction.defaultKarmaValue)),
+      utcOffset: _.get(options, 'utcOffset', 0),
+      remarks: _.get(options, 'remarks'),
+    })
+    .then(row => _.set(row.toJSON(), 'KarmaAction', karmaAction)))
+  .then(row => publishKarmaState(ChildId, row)
+    .then(() => row));

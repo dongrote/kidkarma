@@ -106,22 +106,29 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    socket.on('karma', async ({ChildId, karma}) => {
-      if (ChildId === this.state.selectedChild.id) {
-        await this.onChildSelect(ChildId);
-        /*
-        this.setState({
-          loadingKarma: false,
-          dailyGoodKarma: karma.daily.good,
-          dailyBadKarma: karma.daily.bad,
-          dailyNetKarma: karma.daily.net,
-          totalGoodKarma: karma.total.good,
-          totalBadKarma: karma.total.bad,
-          totalNetKarma: karma.total.net,
-        });
-        */
-      }
-    });
+    socket
+      .on('karma', ({ChildId, karma}) => {
+        if (ChildId === this.state.selectedChild.id) {
+          this.setState({
+            loadingKarma: false,
+            dailyGoodKarma: karma.daily.good,
+            dailyBadKarma: karma.daily.bad,
+            dailyNetKarma: karma.daily.net,
+            totalGoodKarma: karma.total.good,
+            totalBadKarma: karma.total.bad,
+            totalNetKarma: karma.total.net,
+          });
+        }
+      })
+      .on('event', ({ChildId, event}) => {
+        if (ChildId === this.state.selectedChild.id) {
+          this.karmaHistoryLimit++;
+          this.setState({
+            karmaHistory: [event].concat(this.state.karmaHistory),
+            availableKarmaHistory: this.state.availableKarmaHistory + 1,
+          });
+        }
+      });
     var res = await fetch('/api/loggedIn');
     if (res.ok) {
       var json = await res.json();

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import { Button, Icon, Grid, Form, TextArea } from 'semantic-ui-react';
 import NumberInput from './NumberInput';
+
+const utcOffset = moment().utcOffset();
 
 class AddKarmaButton extends Component {
   state = {loading: false, error: false, showForm: false, remarks: '', karma: null};
@@ -10,6 +13,7 @@ class AddKarmaButton extends Component {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
+        utcOffset,
         ChildId: this.props.childId,
         action: this.props.name,
         karma: this.props.karma,
@@ -38,6 +42,7 @@ class AddKarmaButton extends Component {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
+        utcOffset,
         ChildId: this.props.childId,
         action: this.props.name,
         karma: this.state.karma || this.props.karma,
