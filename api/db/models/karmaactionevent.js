@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   KarmaActionEvent.init({
     karma: DataTypes.INTEGER,
     remarks: DataTypes.STRING,
+    utcOffset: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'KarmaActionEvent',

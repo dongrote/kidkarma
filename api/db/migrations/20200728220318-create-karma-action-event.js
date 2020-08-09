@@ -38,6 +38,9 @@ module.exports = {
       remarks: {
         type: Sequelize.STRING
       },
+      utcOffset: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -7,7 +7,7 @@ exports = module.exports = (req, res, next) => {
   const ParentId = req.jwt.id,
     ChildId = req.body.ChildId,
     action = req.body.action,
-    options = {};
+    options = {utcOffset: _.get(req.body, 'utcOffset', 0)};
   if (_.has(req.body, 'karma')) {
     options.karma = Math.abs(req.body.karma);
   }

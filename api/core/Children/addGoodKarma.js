@@ -14,7 +14,9 @@ exports = module.exports = (ParentId, ChildId, action, options) => KarmaActions
     ChildId,
     KarmaActionId: karmaAction.id,
     karma: _.get(options, 'karma', karmaAction.defaultKarmaValue),
+    utcOffset: _.get(options, 'utcOffset', 0),
     remarks: _.get(options, 'remarks'),
   }))
-  .then(row => publishKarmaState(ChildId)
-    .then(() => row.toJSON()));
+  .then(row => row.toJSON())
+  .then(row => publishKarmaState(ChildId, row)
+    .then(() => row));
