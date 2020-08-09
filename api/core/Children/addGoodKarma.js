@@ -16,7 +16,7 @@ exports = module.exports = (ParentId, ChildId, action, options) => KarmaActions
     karma: _.get(options, 'karma', karmaAction.defaultKarmaValue),
     utcOffset: _.get(options, 'utcOffset', 0),
     remarks: _.get(options, 'remarks'),
-  }))
+  }, {include: [models.KarmaAction]}))
   .then(row => row.toJSON())
   .then(row => publishKarmaState(ChildId, row)
     .then(() => row));
